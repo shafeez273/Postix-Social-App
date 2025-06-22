@@ -6,21 +6,29 @@ import oth.ics.wtp.postixbackend.ClientErrors;
 import oth.ics.wtp.postixbackend.WeakCrypto;
 import oth.ics.wtp.postixbackend.dtos.AppUserDto;
 import oth.ics.wtp.postixbackend.dtos.CreateAppUserDto;
+import oth.ics.wtp.postixbackend.dtos.SearchUserDto;
 import oth.ics.wtp.postixbackend.entities.AppUser;
 import oth.ics.wtp.postixbackend.repositories.AppUserRepository;
+import oth.ics.wtp.postixbackend.repositories.FollowerRepository;
 
 import java.util.List;
-import java.util.stream.StreamSupport;
+import java.util.stream.Collectors;
 
 @Service public class AppUserService {
     private final AppUserRepository appUserRepo;
+    private final FollowerRepository followerRepo;
 
-    @Autowired public AppUserService(AppUserRepository appUserRepo) {
+    @Autowired public AppUserService(AppUserRepository appUserRepo, FollowerRepository followerRepo) {
         this.appUserRepo = appUserRepo;
+        this.followerRepo = followerRepo;
     }
 
-    public List<AppUserDto> list() {
-        return StreamSupport.stream(appUserRepo.findAll().spliterator(), false).map(this::toDto).toList();
+    public List<SearchUserDto> searchUsers(String currentUsername, String username) {
+        List<AppUser> searchResults = appUserRepo.findByUsername(username).stream().toList();
+        return searchResults.stream().map(user -> {
+            boolean isFollowing = followerRepo.existsByFollower_UsernameAndFollowing_Username(currentUsername, username);
+            return new SearchUserDto(username, isFollowing);
+        }).collect(Collectors.toList());
     }
 
     public AppUserDto create(CreateAppUserDto createAppUser) {
@@ -28,7 +36,7 @@ import java.util.stream.StreamSupport;
             createAppUser.password() == null || createAppUser.password().isEmpty()) {
             throw ClientErrors.invalidCredentials();
         }
-        if (appUserRepo.existsByName(createAppUser.name())) {
+        if (appUserRepo.existsByUsername(createAppUser.name())) {
             throw ClientErrors.userNameTaken(createAppUser.name());
         }
         AppUser user = toEntity(createAppUser);
@@ -37,19 +45,19 @@ import java.util.stream.StreamSupport;
     }
 
     public AppUserDto get(String userName) {
-        return appUserRepo.findByName(userName)
+        return appUserRepo.findByUsername(userName)
                 .map(this::toDto)
                 .orElseThrow(() -> ClientErrors.userNotFound(userName));
     }
 
     public void delete(String userName) {
-        AppUser user = appUserRepo.findByName(userName)
+        AppUser user = appUserRepo.findByUsername(userName)
                 .orElseThrow(() -> ClientErrors.userNotFound(userName));
         appUserRepo.delete(user);
     }
 
     private AppUserDto toDto(AppUser user) {
-        return new AppUserDto(user.getName());
+        return new AppUserDto(user.getUsername());
     }
 
     private AppUser toEntity(CreateAppUserDto createAppUser) {

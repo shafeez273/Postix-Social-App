@@ -6,6 +6,6 @@ import oth.ics.wtp.postixbackend.entities.AppUser;
 import java.util.Optional;
 
 public interface AppUserRepository extends CrudRepository<AppUser, String> {
-    Optional<AppUser> findByName(String username);
-    boolean existsByName(String name);
+    Optional<AppUser> findByUsername(String username);
+    boolean existsByUsername(String username);
 }

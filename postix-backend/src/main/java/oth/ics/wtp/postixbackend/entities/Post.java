@@ -1,15 +1,18 @@
 package oth.ics.wtp.postixbackend.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
+import java.util.List;
 
 @Entity public class Post {
     @Id @GeneratedValue private long id;
     private String message;
     private Instant timestamp;
+    @ManyToOne @OnDelete(action = OnDeleteAction.CASCADE) private AppUser user;
+    @OneToMany(mappedBy = "post") private List<Like> likes;
 
     public Post() { }
 
@@ -30,7 +33,7 @@ import java.time.Instant;
         return timestamp;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public AppUser getUser() {
+        return user;
     }
 }

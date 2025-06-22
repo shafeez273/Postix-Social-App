@@ -6,6 +6,7 @@ import oth.ics.wtp.postixbackend.entities.Post;
 import java.util.Optional;
 
 public interface PostRepository extends CrudRepository<Post, Long> {
-    Optional<Post> findByIdAndUserName(long id, String userName);
-    //boolean existsByIdAndUserName(long id. String userName);
+    Optional<Post> findById(long id);
+    Optional<Post> findByUserUsername(String username);
+    boolean existsById(long id);
 }
