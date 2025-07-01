@@ -23,13 +23,18 @@ import java.util.stream.Collectors;
         this.followerRepo = followerRepo;
     }
 
-    public List<SearchUserDto> searchUsers(String currentUsername, String username) {
-        List<AppUser> searchResults = appUserRepo.findByUsername(username).stream().toList();
-        return searchResults.stream().map(user -> {
-            boolean isFollowing = followerRepo.existsByFollower_UsernameAndFollowing_Username(currentUsername, username);
-            return new SearchUserDto(username, isFollowing);
-        }).collect(Collectors.toList());
+    public List<SearchUserDto> searchUsers(String currentUsername, String query) {
+        List<AppUser> searchResults = appUserRepo.findByUsernameContainingIgnoreCase(query);
+        return searchResults.stream()
+                .filter(user -> !user.getUsername().equals(currentUsername)) // exclude self
+                .map(user -> {
+                    boolean isFollowing = followerRepo.existsByFollower_UsernameAndFollowing_Username(
+                            currentUsername, user.getUsername());
+                    return new SearchUserDto(user.getUsername(), isFollowing);
+                })
+                .collect(Collectors.toList());
     }
+
 
     public AppUserDto create(CreateAppUserDto createAppUser) {
         if (createAppUser.name() == null || createAppUser.name().isEmpty() ||

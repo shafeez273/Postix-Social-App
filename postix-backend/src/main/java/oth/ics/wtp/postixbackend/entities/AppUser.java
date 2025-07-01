@@ -11,6 +11,7 @@ import java.util.List;
     private String hashedPassword;
     @OneToMany(mappedBy = "follower") private List<Follower> followers;
     @OneToMany(mappedBy = "following") private List<Follower> following;
+    @OneToMany(mappedBy = "user") private List<Post> posts;
 
     public AppUser() { }
 

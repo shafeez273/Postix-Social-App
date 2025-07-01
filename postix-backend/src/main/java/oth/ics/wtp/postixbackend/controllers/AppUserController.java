@@ -24,10 +24,16 @@ import java.util.List;
     }
 
     @SecurityRequirement(name = "basicAuth")
-    @GetMapping(value="users/{userName}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<SearchUserDto> searchUsers(HttpServletRequest request, @PathVariable("userName") String userName) {
+    @GetMapping(value = "search", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<SearchUserDto> searchUsers(HttpServletRequest request,
+                                           @RequestParam("query") String query) {
         AppUser currentUser = authService.getAuthenticatedUser(request);
-        return userService.searchUsers(currentUser.getUsername(), userName);
+        return userService.searchUsers(currentUser.getUsername(), query);
+    }
+
+    @GetMapping(value = "users/{userName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public AppUserDto getUser(@PathVariable("userName") String userName) {
+        return userService.get(userName);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -39,8 +45,7 @@ import java.util.List;
     @SecurityRequirement(name = "basicAuth")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "users/{userName}")
-    public void deleteUser(HttpServletRequest request, @PathVariable("userName") String userName) {
-        authService.getAuthenticatedUser(request);
+    public void deleteUser(@PathVariable("userName") String userName) {
         userService.delete(userName);
     }
 

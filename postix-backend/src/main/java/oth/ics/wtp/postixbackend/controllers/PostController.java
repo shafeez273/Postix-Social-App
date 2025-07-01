@@ -24,18 +24,19 @@ import java.util.List;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "posts", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public PostDto createPost(@RequestBody CreatePostDto createPostDto) {
-        return postService.create(createPostDto);
+    public PostDto createPost(HttpServletRequest request, @RequestBody CreatePostDto createPostDto) {
+        AppUser currentUser = authService.getAuthenticatedUser(request);
+        return postService.create(currentUser.getUsername(), createPostDto);
     }
 
-    @GetMapping(value = "/users/me/posts", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "users/me/posts", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PostDto> listMyPosts(HttpServletRequest request) {
         AppUser user = authService.getAuthenticatedUser(request);
         return postService.listOwnPosts(user.getUsername());
     }
 
     @GetMapping(value = "users/{username}/posts", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<PostDto> listFollowerPosts(HttpServletRequest request, @PathVariable("username") String username) {
+    public List<PostDto> listUserPosts(@PathVariable String username, HttpServletRequest request) {
         AppUser user = authService.getAuthenticatedUser(request);
         return postService.listTheirPosts(user.getUsername(), username);
     }
@@ -46,9 +47,11 @@ import java.util.List;
         return postService.listAllPosts(user.getUsername());
     }
 
+    @DeleteMapping("posts/{postId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping(value = "posts/{postId}")
-    public void deletePost(@PathVariable("postId") long postId) {
-        postService.delete(postId);
+    public void deletePost(HttpServletRequest request, @PathVariable long postId) {
+        AppUser currentUser = authService.getAuthenticatedUser(request);
+        postService.delete(postId, currentUser.getUsername());
     }
+
 }

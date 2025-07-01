@@ -1,13 +1,12 @@
 package oth.ics.wtp.postixbackend.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-@Entity public class Like {
+@Entity
+@Table(name = "post_like")
+public class Like {
     @Id @GeneratedValue private long id;
     @ManyToOne @OnDelete(action = OnDeleteAction.CASCADE) private AppUser user;
     @ManyToOne @OnDelete(action = OnDeleteAction.CASCADE) private Post post;
@@ -29,9 +28,5 @@ import org.hibernate.annotations.OnDeleteAction;
 
     public void setUser(AppUser user) {
         this.user = user;
-    }
-
-    public Post getPost() {
-        return post;
     }
 }

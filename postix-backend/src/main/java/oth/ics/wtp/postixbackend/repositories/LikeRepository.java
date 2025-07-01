@@ -7,5 +7,7 @@ import java.util.Optional;
 
 public interface LikeRepository extends CrudRepository<Like, Long> {
     boolean existsByPostIdAndUserUsername(long postId, String userName);
-    Optional<Like> findByPostId(long postId);
+    Optional<Like> findByPostIdAndUserUsername(long postId, String username);
+    int countByPostId(long postId);
+
 }

@@ -16,9 +16,10 @@ import java.util.List;
 
     public Post() { }
 
-    public Post(String message, Instant timestamp) {
+    public Post(AppUser user, String message) {
+        this.user = user;
         this.message = message;
-        this.timestamp = timestamp;
+        this.timestamp = Instant.now();
     }
 
     public long getId() {

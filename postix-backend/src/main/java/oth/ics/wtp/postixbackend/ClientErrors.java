@@ -29,6 +29,9 @@ public class ClientErrors {
         return log(new ResponseStatusException(HttpStatus.NOT_FOUND, "post not found"));
     }
 
+    public static ResponseStatusException likeNotFound() {
+        return log(new ResponseStatusException(HttpStatus.NOT_FOUND, "like not found"));
+    }
     public static ResponseStatusException cannotFollowYourself() {
         return log(new ResponseStatusException(HttpStatus.BAD_REQUEST, "you cannot follow yourself"));
     }
@@ -43,6 +46,15 @@ public class ClientErrors {
     public static ResponseStatusException notFollowing(String name) {
         return log(new ResponseStatusException(HttpStatus.CONFLICT, "You do not follow " + name));
     }
+
+    public static ResponseStatusException cannotLikeOwnPost() {
+        return log(new ResponseStatusException(HttpStatus.CONFLICT, "You cannot like your own post "));
+    }
+
+    public static ResponseStatusException alreadyLiked(long postId) {
+        return log(new ResponseStatusException(HttpStatus.CONFLICT, "You already liked this post" + postId));
+    }
+
     private static ResponseStatusException log(ResponseStatusException e) {
         logger.error(ExceptionUtils.getMessage(e) + "\n" + ExceptionUtils.getStackTrace(e));
         return e;
