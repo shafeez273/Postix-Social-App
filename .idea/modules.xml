@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/ics-wtp-postix.iml" filepath="$PROJECT_DIR$/.idea/ics-wtp-postix.iml" />
+      <module fileurl="file://$PROJECT_DIR$/postix-backend/postix-backend.iml" filepath="$PROJECT_DIR$/postix-backend/postix-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/postix-frontend.iml" filepath="$PROJECT_DIR$/postix-frontend.iml" />
     </modules>
   </component>
 </project>

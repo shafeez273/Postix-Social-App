@@ -1,0 +1,33 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="JSUnresolvedReference" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="JpaDataSourceORMInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="SameParameterValue" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="SpringDataRepositoryMethodParametersInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="VulnerableLibrariesLocal" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="isIgnoringEnabled" value="true" />
+      <option name="ignoredModules">
+        <list>
+          <option value="postix-backend" />
+          <option value="postix-backend" />
+          <option value="postix-backend" />
+        </list>
+      </option>
+      <option name="ignoredPackages">
+        <list>
+          <option value="org.springframework:spring-context:6.2.6" />
+          <option value="org.apache.tomcat.embed:tomcat-embed-core:10.1.40" />
+          <option value="org.springframework:spring-web:6.2.6" />
+        </list>
+      </option>
+      <option name="ignoredReasons">
+        <list>
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

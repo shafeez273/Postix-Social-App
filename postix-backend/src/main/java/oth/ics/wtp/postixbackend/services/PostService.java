@@ -43,7 +43,7 @@ import static oth.ics.wtp.postixbackend.ClientErrors.*;
         return postRepo.findByUserUsername(username).stream()
                 .sorted(Comparator.comparing(Post::getTimestamp).reversed())
                 .limit(20)
-                .map(this::toDto)
+                .map(post -> toDto(post, username))
                 .collect(Collectors.toList());
     }
 
@@ -62,7 +62,7 @@ import static oth.ics.wtp.postixbackend.ClientErrors.*;
         return postRepo.findByUserUsername(followingUsername).stream()
                 .sorted(Comparator.comparing(Post::getTimestamp).reversed())
                 .limit(20)
-                .map(this::toDto)
+                .map(post -> toDto(post, currentUsername))
                 .collect(Collectors.toList());
      }
 
@@ -83,14 +83,14 @@ import static oth.ics.wtp.postixbackend.ClientErrors.*;
                  .limit(20)
                  .toList();
 
-         return allPosts.stream().map(this::toDto).collect(Collectors.toList());
+         return allPosts.stream().map(post -> toDto(post, currentUsername)).collect(Collectors.toList());
      }
 
     public PostDto create(String username, CreatePostDto createPost) {
         AppUser user = userRepo.findByUsername(username).orElseThrow(() -> userNotFound(username));
         Post post = toEntity(user, createPost);
         postRepo.save(post);
-        return toDto(post);
+        return toDto(post, username);
     }
 
     public void delete(long postId, String username) {
@@ -108,8 +108,8 @@ import static oth.ics.wtp.postixbackend.ClientErrors.*;
     private Post toEntity(AppUser user, CreatePostDto createPost) {
         return new Post(user, createPost.message());
     }
-    private PostDto toDto(Post post) {
-        return new PostDto(post.getId(), post.getMessage(), post.getTimestamp(), likeService.numberOfLikes(post.getId()));
+    private PostDto toDto(Post post, String currentUsername) {
+        return new PostDto(post.getId(), post.getUser().getUsername(), post.getMessage(), post.getTimestamp(), likeService.numberOfLikes(post.getId()), likeService.isLiked(post.getId(), currentUsername));
     }
 
 
