@@ -11,20 +11,17 @@ export default function Search({auth, goToUserProfile}) {
     function search(query) {
         fetch(api + "/search?query=" + encodeURIComponent(query), {method: "GET", headers: basic(auth)})
         .then(response => {
-            if (!response.ok) {
-                throw new Error(response.statusText);
-            } else {
-                return response.json();
-            }
+            if (!response.ok) {throw new Error(response.statusText);}
+            else {return response.json();}
         })
         .then(setResults);
     }
 
-    function follow(followingUserName) {
-        fetch(api+ "/users/" + followingUserName + "/followers", {method: "POST", headers: basic(auth)})
+    function follow(username) {
+        fetch(api+ "/users/" + username + "/followers", {method: "POST", headers: basic(auth)})
             .then(() => {
-                setResults(prev => prev.map(u =>
-                    u.username === followingUserName ? {...u, isFollowing: true} : u
+                setResults(prev => prev.map(user =>
+                    user.username === username ? {...user, isFollowing: true} : user
                 ));
             });
     }
@@ -40,7 +37,6 @@ export default function Search({auth, goToUserProfile}) {
 
     function viewPosts(username) {
         goToUserProfile("search", username);
-
     }
 
     return <>
@@ -57,10 +53,11 @@ export default function Search({auth, goToUserProfile}) {
             {results.map(user => (
                 <li key={user.username}>
                 {user.username}{" "}
-                    {user.isFollowing
+                    <div className="search-buttons">{user.isFollowing
                         ? <button onClick={() => unfollow(user.username)}>Unfollow</button>
                         : <button onClick={() => follow(user.username)}>Follow</button>}
                     <button onClick={() => viewPosts(user.username)}>View Posts</button>
+                    </div>
                 </li>
             ))}
         </ul>

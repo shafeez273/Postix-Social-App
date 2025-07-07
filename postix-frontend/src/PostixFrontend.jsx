@@ -7,7 +7,7 @@ import UserProfile from "./UserProfile.jsx";
 
 export default function PostixFrontend() {
     const [auth, setAuth] = useState({name: null, password: null, loggedIn: false});
-    const [view, setView] = useState("timeline");
+    const [view, setView] = useState("login");
     const [selectedUser, setSelectedUser] = useState(null);
     const [previousView, setPreviousView] = useState("timeline");
 
@@ -22,30 +22,28 @@ export default function PostixFrontend() {
             <nav>
                 <h2>Postix</h2>
                 <ul>
-                    <li><a href="#" className={view === "timeline" ? "current" : "default"}
-                           onClick={() => setView("timeline")}>Timeline</a></li>
-                    <li><a href="#" className={view === "me" ? "current" : "default"}
-                           onClick={() => setView("me")}>Me</a></li>
-                    <li><a href="#" className={view === "search" ? "current" : "default"}
-                           onClick={() => setView("search")}>Search</a></li>
-                    <li><a href="#" className={view === "login" ? "current" : "default"}
-                           onClick={() => setView("login")}>
+                    {auth.loggedIn && (
+                        <>
+                            <li><a href="#" className={view === "timeline" ? "current" : "default"}
+                                   onClick={() => setView("timeline")}>Timeline</a></li>
+                            <li><a href="#" className={view === "me" ? "current" : "default"}
+                                   onClick={() => setView("me")}>Me</a></li>
+                            <li><a href="#" className={view === "search" ? "current" : "default"}
+                                   onClick={() => setView("search")}>Search</a></li>
+                        </>
+                    )}
+                    <li><a href="#" className={view === "login" ? "current" : "default"} onClick={() => setView("login")}>
                         {auth.loggedIn ? "Log out" : "Log in"}</a></li>
                 </ul>
             </nav>
         </header>
 
         <main>
-            {!auth.loggedIn
-                ? <Login auth={auth} setAuth={setAuth} setView={setView}/>
-                : view === "timeline"
-                    ? <Timeline auth={auth} goToUserProfile={goToUserProfile}/>
-                    : view === "me"
-                        ? <MyProfile auth={auth}/>
-                        : view === "search"
-                            ? <Search auth={auth} goToUserProfile={goToUserProfile}/>
-                            : view === "userprofile" && selectedUser
-                                ? <UserProfile auth={auth} username={selectedUser} setView={setView} previousView={previousView}/>
+            {view === "login" ? <Login auth={auth} setAuth={setAuth} setView={setView}/>
+                : view === "timeline" ? <Timeline auth={auth} goToUserProfile={goToUserProfile}/>
+                    : view === "me" ? <MyProfile auth={auth}/>
+                        : view === "search" ? <Search auth={auth} goToUserProfile={goToUserProfile}/>
+                            : view === "userprofile" && selectedUser ? <UserProfile auth={auth} username={selectedUser} setView={setView} previousView={previousView}/>
                                 : null}
         </main>
 

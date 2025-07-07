@@ -1,0 +1,55 @@
+
+services:
+  db:
+    image: mariadb:latest
+    container_name : postix-db
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: asdf1234
+    volumes:
+      - ./db-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "7070:8080"
+    depends_on:
+     - db
+
+  # ─── Spring Boot backend ───────────────────────────────────────────────────
+  backend:
+    build :
+          context: ./postix-backend
+          dockerfile: Dockerfile
+    image: postix-backend:latest
+    container_name: postix-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+     - db
+    environment:
+      SPRING_DATASOURCE_URL:      jdbc:mariadb://db:3306/postix?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: asdf1234
+
+  # ─── Vite/React frontend ────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./postix-frontend
+      dockerfile: Dockerfile
+      args:
+       POSTIX_API: "http://localhost:8080"
+    image: postix-frontend:latest
+
+    container_name : postix-frontend
+
+    restart: always
+    ports:
+       - "80:80"
+    depends_on:
+    - backend

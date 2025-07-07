@@ -2,7 +2,7 @@ import {useContext, useRef, useState} from "react";
 import {Api} from "./Context.js";
 import {basic, anonJson} from "./Headers.js";
 
-export default function Login({auth, setAuth}) {
+export default function Login({auth, setAuth, setView}) {
     const api = useContext(Api);
     const [createAccount, setCreateAccount] = useState(false);
     const name = useRef(undefined);
@@ -24,6 +24,7 @@ export default function Login({auth, setAuth}) {
         }).then(() => {
             newAuth.loggedIn = true;
             setAuth(newAuth);
+            setView("timeline");
         });
     }
 
@@ -36,6 +37,7 @@ export default function Login({auth, setAuth}) {
         }).then(() => {
             newAuth.loggedIn = true;
             setAuth(newAuth)
+            setView("timeline");
         });
     }
 

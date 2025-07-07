@@ -50,6 +50,7 @@ import java.util.List;
     }
 
     @SecurityRequirement(name = "basicAuth")
+
     @PostMapping(value = "users/login")
     public AppUserDto logIn(HttpServletRequest request) {
         AppUser user = authService.logIn(request);
