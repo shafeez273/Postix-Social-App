@@ -1,18 +1,18 @@
+## Overview
 
-## Name
-Postix
+Postix is a microblogging application developed as part of a university project. It enables users to share short posts, connect with others, and interact through a simple and intuitive social feed.
 
-## Description
-Postix will be a microblogging application that allows users to create short messages (posts) and
-share them with with their followers. The application will support user registration, login, logout, and
-the ability to follow other users. Search will be able to create posts, view the timeline of posts of
-themselves and other users, and view an aggregated timeline of posts from users they follow. Search will also be able to like posts.
+## Features
 
-## Visuals
-
-
-## Installation
-For the implementation, the techologies React, Spring Boot, MariaDB, and Docker are to be used.
-
-## Project status
-Develop REST API with SpringBoot
+User authentication (registration, login, logout)
+Create and view posts
+Follow and unfollow users
+Personalized timeline with posts from followed users
+View profiles and user-specific posts
+Like posts
+Search for users and posts
+Tech Stack
+Frontend: React
+Backend: Spring Boot (REST API)
+Database: MariaDB
+Containerization: Docker
